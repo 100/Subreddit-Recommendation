@@ -49,12 +49,8 @@ def createDistanceMatrix(subredditVectors, vectorsMatrix):
 def createJSON(subredditVectors, distanceMatrix):
     jsonDistances = {}
     for subreddit in subredditVectors:
-        if subreddit not in jsonDistances:
-            idx = subredditVectors.keys().index(subreddit)
-            jsonDistances[subreddit] = list(distanceMatrix[idx])
-    subredditMap = {}
-    subredditMap["subreddits"] = subredditVectors.keys()
-    with open("subredditMap.json", "w") as map:
-        json.dumps(subredditMap , map)
+        idx = subredditVectors.keys().index(subreddit)
+        row = list(distanceMatrix[idx])
+        names = [sub for idx, sub in enumerate(subredditVectors.keys()) if row[idx] != 0]
     with open("distanceMatrix.json", "w") as matrix:
         json.dumps(jsonDistances, matrix)
