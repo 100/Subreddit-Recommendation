@@ -1,20 +1,22 @@
 import sqlite3
-import numpy
 from sklearn.feature_extraction.text import CountVectorizer
 import json
 
-def createWordVectors(numSubreddits):
+def createWordsJSON(numSubreddits, numWords, subreddits):
     conn = sqlite3.connect(database.db)
-    subreddits = {}
-    results = con.execute("""SELECT subreddit, body FROM MAY2015"""):
-    for subreddit, comment in results:
-        if subreddit in subreddits:
-            subreddits[subreddit].append(comment)
-        else:
-            subreddits[subreddit] = [comment]
+    subredditWords = {}
+    for subreddit in subreddits:
+        results = con.execute("""SELECT subreddit, body FROM MAY2015 WHERE subreddit=?""", (subreddit,))
+        comments = []
+        for subreddit, comment in results:
+            comments.append(preprocess(comment))
+        counter = CountVectorizer(stop_words = "english", lowercase = True, max_features = numWords)
+        counts = counter.fit_transform(comments)
+        subredditWords[subreddit] = counts
     conn.close()
-    sortedSubs = sorted(subreddits.items(), reverse = True, key = lambda x: len(x[1]))
-    return dict(sortedSubs[0: numSubreddits])
+    with open("wordClouds.json", "w") as clouds:
+        json.dumps(subredditWords, clouds)
+
 
 def preprocess(comment):
     lowered = comment.lower()
