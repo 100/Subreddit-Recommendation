@@ -13,7 +13,7 @@ def fetchTopSubreddits(topXSkip, limit):
             subreddits[subreddit] = 1
     sortedSubs = sorted(subreddits.items(), reverse = True, key = lambda x: x[1])
     conn.close()
-    ##do not use the $topXSkip most popular, only pick $limit subreddits
+    #do not use the $topXSkip most popular, only pick $limit subreddits
     return dict(sortedSubs[topXSkip: limit + topXSkip])
 
 def fetchUsers():
