@@ -5,16 +5,13 @@ import json
 
 def fetchTopSubreddits(topXSkip, limit):
     conn = sqlite3.connect(database.db)
+    results = con.execute("""SELECT DISTINCT subreddit, COUNT(*) as count
+        FROM MAY2015 GROUP BY subreddit ORDER BY count DESC""")
     subreddits = {}
-    for subreddit in con.execute("""SELECT subreddit FROM MAY2015"""):
-        if subreddit in subreddits:
-            subreddits[subreddit] += 1
-        else:
-            subreddits[subreddit] = 1
-    sortedSubs = sorted(subreddits.items(), reverse = True, key = lambda x: x[1])
+    for subreddit, count in results[topXSkip: topXSkip + limit]:
+        subreddits[subreddit] = count
     conn.close()
-    #do not use the $topXSkip most popular, only pick $limit subreddits
-    return dict(sortedSubs[topXSkip: limit + topXSkip])
+    return subreddits
 
 def fetchUsers():
     conn = sqlite3.connect(database.db)
@@ -33,7 +30,7 @@ def mapUserVectors(topSubreddits, users):
             if subreddit in topSubreddits and user in users:
                 subredditVectors[subreddit][users.index(user)] = 1
         else:
-            subredditVectors[subreddit] = [] * len(users)
+            subredditVectors[subreddit] = [0] * len(users)
     con.close()
     return subredditVectors
 

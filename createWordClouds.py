@@ -25,7 +25,7 @@ def preprocess(comment):
     cleansedList = []
     for word in strippedPunct.split():
         boolAcceptables = [char in acceptable for char in word]
-        if (False in boolAcceptables):
+        if False in boolAcceptables:
             continue
         else:
             cleansedList.append(word)
