@@ -6,7 +6,7 @@ def createWordsJSON(numWords, subreddits):
     conn = sqlite3.connect("database.sqlite")
     subredditWords = {}
     for subreddit in subreddits:
-        results = con.execute("""SELECT subreddit, body FROM MAY2015 WHERE subreddit=?""", (subreddit,))
+        results = conn.execute("""SELECT subreddit, body FROM MAY2015 WHERE subreddit=?""", (subreddit,))
         comments = []
         for subreddit, comment in results:
             comments.append(preprocess(comment))
