@@ -2,7 +2,7 @@ import sqlite3
 from sklearn.feature_extraction.text import CountVectorizer
 import json
 
-def createWordsJSON(numSubreddits, numWords, subreddits):
+def createWordsJSON(numWords, subreddits):
     conn = sqlite3.connect("database.sqlite")
     subredditWords = {}
     for subreddit in subreddits:

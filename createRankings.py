@@ -43,11 +43,13 @@ def createDistanceMatrix(subredditVectors, vectorsMatrix):
     distances = pdist(vectorsMatrix, "jaccard")
     return distances
 
-def createJSON(subredditVectors, distanceMatrix):
+def createRankingsJSON(subredditVectors, distanceMatrix, topXSubs):
     jsonDistances = {}
     for subreddit in subredditVectors:
         idx = subredditVectors.keys().index(subreddit)
         row = list(distanceMatrix[idx])
         names = [sub for idx, sub in enumerate(subredditVectors.keys()) if row[idx] != 0]
+        sortedNames = sorted(names, reverse = True, lambda x: row[subredditVectors.keys().index(x)])
+        jsonDistances[subreddit] = sortedNames[0: topXSubs]
     with open("distanceMatrix.json", "w") as matrix:
         json.dumps(jsonDistances, matrix)
