@@ -4,7 +4,7 @@ import scipy.spatial.distance
 import json
 
 def fetchTopSubreddits(topXSkip, limit):
-    conn = sqlite3.connect(database.db)
+    conn = sqlite3.connect("database.sqlite")
     results = con.execute("""SELECT DISTINCT subreddit, COUNT(*) as count
         FROM MAY2015 GROUP BY subreddit ORDER BY count DESC""")
     subreddits = {}
@@ -14,7 +14,7 @@ def fetchTopSubreddits(topXSkip, limit):
     return subreddits
 
 def fetchUsers():
-    conn = sqlite3.connect(database.db)
+    conn = sqlite3.connect("database.sqlite")
     users = []
     for user in con.execute("""SELECT DISTINCT author from MAY2015"""):
         users.append(user)
@@ -22,7 +22,7 @@ def fetchUsers():
     return users
 
 def mapUserVectors(topSubreddits, users):
-    conn = sqlite.connect(database.db)
+    conn = sqlite.connect("database.sqlite")
     subredditVectors = {}
     dbData = con.execute("""SELECT subreddit, author FROM MAY2015""")
     for subreddit, user in dbData:
